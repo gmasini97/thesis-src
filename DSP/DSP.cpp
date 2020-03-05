@@ -4,13 +4,15 @@
 #include "SignalProcessor.h"
 
 namespace DSP {
-	int runWithFiles(SNDFILE* infile, SNDFILE* outfile, SF_INFO* sf_info, size_t bufferLen, SignalProcessor* processor) {
+	int runWithFiles(SNDFILE* infile, SNDFILE* outfile, SF_INFO* sf_info, size_t bufferLen, MultichannelSignalProcessor* msp) {
 
 		float* data = (float*)malloc(bufferLen * sizeof(float));
 
+		msp->reset();
+
 		int readcount;
 
-		if (!(infile) || !(outfile) || !(processor))
+		if (!(infile) || !(outfile) || !(msp))
 		{
 			cout << "Invalid inputs" << endl;
 			return 1;
@@ -18,7 +20,7 @@ namespace DSP {
 
 		while ((readcount = sf_read_float(infile, data, bufferLen)))
 		{
-			processor->process_buffer(data, bufferLen, readcount, sf_info->channels);
+			msp->process_buffer(data, readcount);
 			sf_write_float(outfile, data, readcount);
 		}
 
@@ -28,21 +30,5 @@ namespace DSP {
 		free(data);
 
 		return 0;
-	}
-
-
-
-	int runWithStdInOut(size_t bufferLen, SignalProcessor* processor)
-	{
-		SNDFILE* infile, * outfile;
-
-		SF_INFO sf_info;
-
-		memset(&sf_info, 0, sizeof(sf_info));
-
-		infile = sf_open_fd(0, SFM_READ, &sf_info, true);
-		outfile = sf_open_fd(1, SFM_WRITE, &sf_info, true);
-
-		return runWithFiles(infile, outfile, &sf_info, bufferLen, processor);
 	}
 }

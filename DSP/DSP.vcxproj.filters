@@ -37,7 +37,7 @@
       <Filter>Header Files\SignalProcessors</Filter>
     </ClInclude>
     <ClInclude Include="FFT.h">
-      <Filter>Header Files\SignalProcessors</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -50,8 +50,11 @@
     <ClCompile Include="LowPassFilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SignalProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="FFT.cpp">
-      <Filter>Source Files\SignalProcessors</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

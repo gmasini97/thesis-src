@@ -8,8 +8,8 @@
 using namespace std;
 
 namespace DSP {
-	int runWithFiles(SNDFILE* infile, SNDFILE* outfile, SF_INFO* sf_info, size_t bufferLen, SignalProcessor* processor);
+	int runWithFiles(SNDFILE* infile, SNDFILE* outfile, SF_INFO* sf_info, size_t bufferLen, MultichannelSignalProcessor* msp);
 
-	int runWithStdInOut(size_t bufferLen, SignalProcessor* processor);
+	//int runWithStdInOut(size_t bufferLen, SignalProcessor* processor);
 }
 
