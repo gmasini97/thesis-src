@@ -4,10 +4,10 @@
 #include "DSP.h"
 
 namespace DSP {
-	int runOnFile(SNDFILE* infile, SF_INFO* sf_info, size_t bufferLen, MultichannelSignalProcessor* msp, OutputWriter* outputWriter) {
+	int runOnFile(SNDFILE* infile, SF_INFO* sf_info, size_t bufferLen, MultichannelSignalProcessor* msp) {
 
-		float* data = (float*)malloc(bufferLen * sizeof(float));
-		float* nodata = (float*)malloc(bufferLen * sizeof(float));
+		float* data = new float[bufferLen];
+		float* nodata = new float[bufferLen];
 
 		for (size_t i = 0 ; i < bufferLen ; i++)
 			nodata[i] = 0;
@@ -25,13 +25,11 @@ namespace DSP {
 		while ((readcount = sf_read_float(infile, data, bufferLen)))
 		{
 			msp->process_buffer(data, nodata, readcount);
-			outputWriter->write_buffer(data, nodata, readcount);
 		}
 
-		outputWriter->close();
 		sf_close(infile);
 
-		free(data);
+		delete[] data;
 
 		return 0;
 	}

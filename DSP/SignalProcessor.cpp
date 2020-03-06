@@ -5,6 +5,7 @@ SignalProcessor::SignalProcessor(size_t datalen)
 {
 	this->datalen = datalen;
 }
+SignalProcessor::~SignalProcessor(){}
 
 size_t SignalProcessor::getDataLen()
 {
@@ -13,11 +14,63 @@ size_t SignalProcessor::getDataLen()
 
 
 
+
+
+SignalProcessorChain::SignalProcessorChain(size_t datalen, SignalProcessor** chain, size_t chainlen) : SignalProcessor(datalen)
+{
+
+	this->chain = chain;
+	this->chainlen = chainlen;
+}
+
+SignalProcessorChain::~SignalProcessorChain()
+{
+	for (size_t x = 0; x < this->chainlen; x++)
+	{
+		delete this->chain[x];
+	}
+	delete[] this->chain;
+}
+
+void SignalProcessorChain::reset()
+{
+	for (size_t x = 0; x < this->chainlen; x++)
+	{
+		this->chain[x]->reset();
+	}
+}
+
+void SignalProcessorChain::process_buffer(float* real, float* imaginary, size_t readcount)
+{
+	for (size_t x = 0; x < this->chainlen; x++)
+	{
+		this->chain[x]->process_buffer(real, imaginary, readcount);
+	}
+}
+
+
+
+
+
+
+
 MultichannelSignalProcessor::MultichannelSignalProcessor(size_t datalen, size_t channels, SignalProcessor** processors)
 {
 	this->processors = processors;
 	this->datalen = datalen;
 	this->channels = channels;
+
+	this->bufferRe = new float[datalen / channels];
+	this->bufferIm = new float[datalen / channels];
+}
+
+MultichannelSignalProcessor::~MultichannelSignalProcessor()
+{
+	for (size_t channel = 0; channel < channels; channel++)
+		delete processors[channel];
+	free(processors);
+	delete[] bufferRe;
+	delete[] bufferIm;
 }
 
 size_t MultichannelSignalProcessor::getDataLen()
@@ -40,8 +93,6 @@ void MultichannelSignalProcessor::process_buffer(float* real, float* imaginary, 
 	size_t totalSamples = datalen / channels;
 	size_t maxSamples = getDataLen() / channels;
 
-	float* bufferRe = (float*) malloc(sizeof(float)*maxSamples);
-	float* bufferIm = (float*) malloc(sizeof(float) * maxSamples);
 	for (size_t channel = 0; channel < channels; channel++)
 	{
 		for (size_t i = 0; i < totalSamples; i++) {
@@ -61,5 +112,6 @@ void MultichannelSignalProcessor::process_buffer(float* real, float* imaginary, 
 }
 
 NoProcessor::NoProcessor(size_t datalen) : SignalProcessor(datalen){};
+NoProcessor::~NoProcessor(){};
 void NoProcessor::reset(){};
 void NoProcessor::process_buffer(float* real, float* imaginary, size_t readcount) {};

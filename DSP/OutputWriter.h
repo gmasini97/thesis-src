@@ -1,8 +1,9 @@
 #pragma once
+#include "SignalProcessor.h"
 
-class OutputWriter
+class OutputWriter : public SignalProcessor
 {
 public:
-	virtual void write_buffer(float* real, float* imaginary, size_t datalen) = 0;
-	virtual void close() = 0;
+	OutputWriter(size_t datalen);
+	~OutputWriter();
 };

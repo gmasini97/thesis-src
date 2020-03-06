@@ -21,7 +21,7 @@ void bit_reversal_sort(float* real, float* imaginary, size_t size)
 			imaginary[i] = tmpIm;
 		}
 		k = halfSize;
-		if (k <= j)
+		while (k <= j)
 		{
 			j = j-k;
 			k = k/2;
@@ -30,13 +30,26 @@ void bit_reversal_sort(float* real, float* imaginary, size_t size)
 	}
 }
 
+void mul_cmplx(float* reA, float* imA, float reB, float imB)
+{
+	float a = *reA * reB - *imA * imB;
+	float b = *reA * imB + *imA * reB;
+	*reA = a;
+	*imA = b;
+}
+
 void butterfly_calculation(float* reA, float* imA, float *reB, float *imB, float reW, float imW)
 {
 	float reAA = *reA;
 	float imAA = *imA;
 
-	float reBW = *reB * reW - *imB * imW;
-	float imBW = *reB * imW + *imB * reW;
+	float reBW = *reB;
+	float imBW = *imB;
+
+	mul_cmplx(&reBW, &imBW, reW, imW);
+
+	//float reBW = *reB * reW - *imB * imW;
+	//float imBW = *reB * imW + *imB * reW;
 
 	*reA += reBW;
 	*imA += imBW;
@@ -45,43 +58,47 @@ void butterfly_calculation(float* reA, float* imA, float *reB, float *imB, float
 	*imB = imAA - imBW;
 }
 
-void wn(float* re, float* im, size_t exp, size_t size)
+void exp(float* re, float* im, float exp)
 {
-	*re = cos(2.0 * M_PI * exp / size);
-	*im = -sin(2.0 * M_PI * exp / size);
+	*re = cos(exp);
+	*im = sin(exp);
 }
 
 void fft(float* real, float* imaginary, size_t size)
 {
-	float reW, imW;
+	float reW, imW, reDeltaW, imDeltaW;
 	size_t levels;
 	size_t butterfly_exponent;
 	size_t index_a, index_b;
 
 	levels = (size_t)log2(size);
-
 	bit_reversal_sort(real, imaginary, size);
 
 	for (size_t level = 0; level < levels; level++)
 	{
 		size_t butterflies_per_dft = (size_t)pow(2, level);
 		size_t dfts = size / (butterflies_per_dft * 2);
-
+		exp(&reDeltaW, &imDeltaW, -(M_PI/butterflies_per_dft));
+		reW = 1.0f;
+		imW = 0.0f;
 		for (size_t butterfly = 0; butterfly < butterflies_per_dft; butterfly++)
 		{
 			butterfly_exponent = butterfly * dfts;
-			wn(&reW, &imW, butterfly_exponent, size);
 			for (size_t dft = 0; dft < dfts; dft++)
 			{
 				index_a = butterfly + dft * (butterflies_per_dft * 2);
 				index_b = index_a + butterflies_per_dft;
 				butterfly_calculation(real + index_a, imaginary + index_a, real + index_b, imaginary + index_b, reW, imW);
 			}
+			mul_cmplx(&reW, &imW, reDeltaW, imDeltaW);
 		}
 	}
 }
 
 FFTProcessor::FFTProcessor(size_t datalen) : SignalProcessor(datalen)
+{
+}
+FFTProcessor::~FFTProcessor()
 {
 }
 

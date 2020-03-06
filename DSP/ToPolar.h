@@ -3,13 +3,11 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
-void dft(float* real, float* imaginary, size_t size);
-
-class DFTProcessor : public SignalProcessor
+class ToPolar : public SignalProcessor
 {
 public:
-	DFTProcessor(size_t datalen);
-	~DFTProcessor();
+	ToPolar(size_t datalen);
+	~ToPolar();
 	void reset();
 	void process_buffer(float* real, float* imaginary, size_t readcount);
 };

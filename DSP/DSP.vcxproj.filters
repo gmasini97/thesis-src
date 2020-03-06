@@ -22,9 +22,6 @@
     <Filter Include="Source Files\OutputWriters">
       <UniqueIdentifier>{bed95a50-6b97-460c-b82c-4a99f328f9b3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\OutputWriters">
-      <UniqueIdentifier>{3d497aa4-4450-46a9-97db-168225d57bd1}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -42,13 +39,19 @@
     <ClInclude Include="DFT.h">
       <Filter>Header Files\SignalProcessors</Filter>
     </ClInclude>
-    <ClInclude Include="OutputWriter.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="FFT.h">
+      <Filter>Header Files\SignalProcessors</Filter>
+    </ClInclude>
+    <ClInclude Include="IFTT.h">
+      <Filter>Header Files\SignalProcessors</Filter>
     </ClInclude>
     <ClInclude Include="CSVOutputWriter.h">
-      <Filter>Header Files\OutputWriters</Filter>
+      <Filter>Header Files\SignalProcessors</Filter>
     </ClInclude>
-    <ClInclude Include="FFT.h">
+    <ClInclude Include="OutputWriter.h">
+      <Filter>Header Files\SignalProcessors</Filter>
+    </ClInclude>
+    <ClInclude Include="ToPolar.h">
       <Filter>Header Files\SignalProcessors</Filter>
     </ClInclude>
   </ItemGroup>
@@ -65,10 +68,19 @@
     <ClCompile Include="DFT.cpp">
       <Filter>Source Files\SignalProcessors</Filter>
     </ClCompile>
-    <ClCompile Include="CSVOutputWriter.cpp">
-      <Filter>Source Files\OutputWriters</Filter>
-    </ClCompile>
     <ClCompile Include="FFT.cpp">
+      <Filter>Source Files\SignalProcessors</Filter>
+    </ClCompile>
+    <ClCompile Include="IFTT.cpp">
+      <Filter>Source Files\SignalProcessors</Filter>
+    </ClCompile>
+    <ClCompile Include="CSVOutputWriter.cpp">
+      <Filter>Source Files\SignalProcessors</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputWriter.cpp">
+      <Filter>Source Files\SignalProcessors</Filter>
+    </ClCompile>
+    <ClCompile Include="ToPolar.cpp">
       <Filter>Source Files\SignalProcessors</Filter>
     </ClCompile>
   </ItemGroup>

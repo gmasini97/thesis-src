@@ -157,15 +157,19 @@
     <ClInclude Include="DSP.h" />
     <ClInclude Include="FFT.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="IFTT.h" />
     <ClInclude Include="OutputWriter.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SignalProcessor.h" />
+    <ClInclude Include="ToPolar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CSVOutputWriter.cpp" />
     <ClCompile Include="DFT.cpp" />
     <ClCompile Include="DSP.cpp" />
     <ClCompile Include="FFT.cpp" />
+    <ClCompile Include="IFTT.cpp" />
+    <ClCompile Include="OutputWriter.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -173,6 +177,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="SignalProcessor.cpp" />
+    <ClCompile Include="ToPolar.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

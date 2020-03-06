@@ -10,7 +10,8 @@ private:
 	FILE* file;
 	size_t count;
 public:
-	CSVOutputWriter(const char* filename);
-	void write_buffer(float* real, float* imaginary, size_t datalen);
-	void close();
+	CSVOutputWriter(size_t datalen, const char* filename);
+	~CSVOutputWriter();
+	void reset();
+	void process_buffer(float* real, float* imaginary, size_t datalen);
 };

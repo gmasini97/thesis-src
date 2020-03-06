@@ -3,8 +3,8 @@
 
 void dft(float* real, float* imaginary, size_t size)
 {
-	float* re = (float*)malloc(sizeof(float) * size);
-	float* im = (float*)malloc(sizeof(float) * size);
+	float* re = new float[size];
+	float* im = new float[size];
 
 	float sr, si;
 
@@ -14,8 +14,8 @@ void dft(float* real, float* imaginary, size_t size)
 		im[k] = 0;
 		for (size_t i = 0; i < size; i++)
 		{
-			sr = cos(2 * M_PI * k * i / size);
-			si = -sin(2 * M_PI * k * i / size);
+			sr = (float) cos(2 * M_PI * k * i / size);
+			si = (float) -sin(2 * M_PI * k * i / size);
 
 			re[k] += real[i] * sr - imaginary[i] * si;
 			im[k] += real[i] * si + imaginary[i] * sr;
@@ -28,11 +28,14 @@ void dft(float* real, float* imaginary, size_t size)
 		imaginary[k] = im[k];
 	}
 
-	free(re);
-	free(im);
+	delete[] re;
+	delete[] im;
 }
 
 DFTProcessor::DFTProcessor(size_t datalen) : SignalProcessor(datalen)
+{
+}
+DFTProcessor::~DFTProcessor()
 {
 }
 
