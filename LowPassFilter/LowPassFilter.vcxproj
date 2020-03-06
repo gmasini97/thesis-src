@@ -22,7 +22,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{7DD7D12E-FE94-41F3-806C-F74D8DDDF4CA}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>LowPassFilter</RootNamespace>
+    <RootNamespace>thesis-src</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>Main</ProjectName>
   </PropertyGroup>

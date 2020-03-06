@@ -1,109 +1,95 @@
 #include "pch.h"
 #include "FFT.h"
 
-void bitreverse_sort(float* re, float* im, size_t datalen)
+void bit_reversal_sort(float* real, float* imaginary, size_t size)
 {
-	size_t nd2 = datalen / 2;
-	size_t j = nd2;
-	size_t k = 0;
+	size_t j, k, halfSize;
+	float tmpRe, tmpIm;
 
-	float tmp1, tmp2;
+	halfSize = size / 2;
+	j = halfSize;
 
-	for (size_t i = 1; i < datalen-1; i++)
+	for (size_t i = 1; i < size - 2; i++)
 	{
-		if (i < j) {
-			tmp1 = re[j];
-			tmp2 = im[j];
-
-			re[j] = re[i];
-			re[i] = tmp1;
-
-			im[j] = im[i];
-			im[i] = tmp2;
+		if (i < j)
+		{
+			tmpRe = real[j];
+			tmpIm = imaginary[j];
+			real[j] = real[i];
+			imaginary[j] = imaginary[i];
+			real[i] = tmpRe;
+			imaginary[i] = tmpIm;
 		}
-		k = nd2;
-		while (k <= j) {
-			j -= k;
-			k /= 2;
+		k = halfSize;
+		if (k <= j)
+		{
+			j = j-k;
+			k = k/2;
 		}
-		j += k;
+		j = j+k;
 	}
 }
 
-void butterfly_calculation(float* ar, float* ai, float* br, float* bi, float ur, float ui)
+void butterfly_calculation(float* reA, float* imA, float *reB, float *imB, float reW, float imW)
 {
-	float tr = *br * ur - *bi * ui;
-	float ti = *br * ui + *bi * ur;
-	*br = *ar - tr;
-	*bi = *ai - ti;
-	*ar = *ar + tr;
-	*ai = *ai + ti;
+	float reAA = *reA;
+	float imAA = *imA;
+
+	float reBW = *reB * reW - *imB * imW;
+	float imBW = *reB * imW + *imB * reW;
+
+	*reA += reBW;
+	*imA += imBW;
+	
+	*reB = reAA - reBW;
+	*imB = imAA - imBW;
 }
 
-void fft(float* re, float* im, size_t datalen)
+void wn(float* re, float* im, size_t exp, size_t size)
 {
-	size_t m = (size_t)log2(datalen);
-	size_t nm1 = datalen - 1;
-	size_t le, le2, ip, jm1;
-	float ur, ui, sr, si, tr;
+	*re = cos(2.0 * M_PI * exp / size);
+	*im = -sin(2.0 * M_PI * exp / size);
+}
 
-	bitreverse_sort(re, im, datalen);
+void fft(float* real, float* imaginary, size_t size)
+{
+	float reW, imW;
+	size_t levels;
+	size_t butterfly_exponent;
+	size_t index_a, index_b;
 
-	for (size_t l = 1; l < m; l++) {
-		le = (size_t) pow(2, l);
-		le2 = le / 2;
-		ur = 1;
-		ui = 0;
-		sr = cos(M_PI / le2);
-		si = -sin(M_PI / le2);
-		for (size_t j = 1; j < le2; j++) {
-			jm1 = j-1;
-			for (size_t i = jm1; i < nm1; i += le) {
-				ip = i + le2;
-				float* ar = re + i;
-				float* ai = im + i;
-				float* br = re + ip;
-				float* bi = im + i;
-				butterfly_calculation(ar, ai, br, bi, ur, ui);
+	levels = (size_t)log2(size);
+
+	bit_reversal_sort(real, imaginary, size);
+
+	for (size_t level = 0; level < levels; level++)
+	{
+		size_t butterflies_per_dft = (size_t)pow(2, level);
+		size_t dfts = size / (butterflies_per_dft * 2);
+
+		for (size_t butterfly = 0; butterfly < butterflies_per_dft; butterfly++)
+		{
+			butterfly_exponent = butterfly * dfts;
+			wn(&reW, &imW, butterfly_exponent, size);
+			for (size_t dft = 0; dft < dfts; dft++)
+			{
+				index_a = butterfly + dft * (butterflies_per_dft * 2);
+				index_b = index_a + butterflies_per_dft;
+				butterfly_calculation(real + index_a, imaginary + index_a, real + index_b, imaginary + index_b, reW, imW);
 			}
-			tr = ur;
-			ur = tr*sr - ui*si;
-			ui = tr*si + ui*sr;
 		}
 	}
 }
-
 
 FFTProcessor::FFTProcessor(size_t datalen) : SignalProcessor(datalen)
 {
-	this->im = (float*) malloc(sizeof(float) * datalen);
-	this->reset();
 }
 
 void FFTProcessor::reset()
 {
-	size_t datalen = this->getDataLen();
-	for (int i = 0; i < datalen; i++) {
-		this->im[i] = 0;
-	}
 }
 
-void FFTProcessor::process_buffer(float* data, size_t readcount)
+void FFTProcessor::process_buffer(float* real, float* imaginary, size_t readcount)
 {
-	size_t datalen = this->getDataLen();
-	for (size_t i = readcount; i < datalen; i++) {
-		data[i] = 0;
-	}
-
-	this->re = data;
-
-	fft(this->re, this->im, datalen);
-
-	float xre, xim;
-
-	for (size_t i = 0; i < datalen; i++) {
-		xre = this->re[i];
-		xim = this->im[i];
-		data[i] = sqrt(xre*xre + xim*xim);
-	}
-};
+	fft(real, imaginary, readcount);
+}

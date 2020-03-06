@@ -13,11 +13,6 @@ size_t SignalProcessor::getDataLen()
 
 
 
-
-
-
-
-
 MultichannelSignalProcessor::MultichannelSignalProcessor(size_t datalen, size_t channels, SignalProcessor** processors)
 {
 	this->processors = processors;
@@ -37,7 +32,7 @@ void MultichannelSignalProcessor::reset()
 		this->processors[channel]->reset();
 }
 
-void MultichannelSignalProcessor::process_buffer(float* data, size_t readcount)
+void MultichannelSignalProcessor::process_buffer(float* real, float* imaginary, size_t readcount)
 {
 	size_t channels = this->channels;
 	size_t datalen = readcount;
@@ -45,23 +40,26 @@ void MultichannelSignalProcessor::process_buffer(float* data, size_t readcount)
 	size_t totalSamples = datalen / channels;
 	size_t maxSamples = getDataLen() / channels;
 
-	float* buffer = (float*) malloc(sizeof(float)*maxSamples);
+	float* bufferRe = (float*) malloc(sizeof(float)*maxSamples);
+	float* bufferIm = (float*) malloc(sizeof(float) * maxSamples);
 	for (size_t channel = 0; channel < channels; channel++)
 	{
 		for (size_t i = 0; i < totalSamples; i++) {
 			dataIndex = channel + i * channels;
-			buffer[i] =  data[dataIndex];
+			bufferRe[i] =  real[dataIndex];
+			bufferIm[i] = imaginary[dataIndex];
 		}
 
-		this->processors[channel]->process_buffer(buffer, totalSamples);
+		this->processors[channel]->process_buffer(bufferRe, bufferIm, totalSamples);
 
 		for (size_t i = 0; i < totalSamples; i++) {
 			dataIndex = channel + i * channels;
-			data[dataIndex] = buffer[i];
+			real[dataIndex] = bufferRe[i];
+			imaginary[dataIndex] = bufferIm[i];
 		}
 	}
 }
 
 NoProcessor::NoProcessor(size_t datalen) : SignalProcessor(datalen){};
 void NoProcessor::reset(){};
-void NoProcessor::process_buffer(float* data, size_t readcount) {};
+void NoProcessor::process_buffer(float* real, float* imaginary, size_t readcount) {};

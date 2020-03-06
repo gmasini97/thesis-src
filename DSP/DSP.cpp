@@ -1,18 +1,22 @@
 #include "pch.h"
 #include "framework.h"
 #include "DSP.h"
-#include "SignalProcessor.h"
+#include "DSP.h"
 
 namespace DSP {
-	int runWithFiles(SNDFILE* infile, SNDFILE* outfile, SF_INFO* sf_info, size_t bufferLen, MultichannelSignalProcessor* msp) {
+	int runOnFile(SNDFILE* infile, SF_INFO* sf_info, size_t bufferLen, MultichannelSignalProcessor* msp, OutputWriter* outputWriter) {
 
 		float* data = (float*)malloc(bufferLen * sizeof(float));
+		float* nodata = (float*)malloc(bufferLen * sizeof(float));
+
+		for (size_t i = 0 ; i < bufferLen ; i++)
+			nodata[i] = 0;
 
 		msp->reset();
 
 		int readcount;
 
-		if (!(infile) || !(outfile) || !(msp))
+		if (!(infile) || !(msp))
 		{
 			cout << "Invalid inputs" << endl;
 			return 1;
@@ -20,11 +24,11 @@ namespace DSP {
 
 		while ((readcount = sf_read_float(infile, data, bufferLen)))
 		{
-			msp->process_buffer(data, readcount);
-			sf_write_float(outfile, data, readcount);
+			msp->process_buffer(data, nodata, readcount);
+			outputWriter->write_buffer(data, nodata, readcount);
 		}
 
-		sf_close(outfile);
+		outputWriter->close();
 		sf_close(infile);
 
 		free(data);

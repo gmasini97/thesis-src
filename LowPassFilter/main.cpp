@@ -1,19 +1,20 @@
 #include "DSP.h"
+#include "DFT.h"
 #include "FFT.h"
+#include "CSVOutputWriter.h"
 
 using namespace DSP;
 
 int main()
 {
-
-	SNDFILE* infile, * outfile;
+	SNDFILE* infile, * outfile= NULL;
 
 	SF_INFO sf_info;
 
 	memset(&sf_info, 0, sizeof(sf_info));
 
 	infile = sf_open_fd(0, SFM_READ, &sf_info, true);
-	outfile = sf_open_fd(1, SFM_WRITE, &sf_info, true);
+	CSVOutputWriter* csv = new CSVOutputWriter("D:\\csv.csv");
 
 	size_t channels = sf_info.channels;
 	size_t datalen = 512;
@@ -24,6 +25,6 @@ int main()
 	}
 	MultichannelSignalProcessor* msp = new MultichannelSignalProcessor(datalen, channels, procs);
 
-	return runWithFiles(infile, outfile, &sf_info, datalen, msp);
+	return runOnFile(infile, &sf_info, datalen, msp, csv);
 
 }
