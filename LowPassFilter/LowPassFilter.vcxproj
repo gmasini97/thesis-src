@@ -107,7 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Program Files\Mega-Nerd\libsndfile\include;D:\_repos\thesis-src\DSP</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Program Files\Mega-Nerd\libsndfile\include;D:\_repos\thesis-src\DSP;D:\_repos\thesis-src\CUDA_DSP</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,6 +157,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CUDA_DSP\CUDA_DSP.vcxproj">
+      <Project>{4f942977-a066-4f59-830e-62a76035253c}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\DSP\DSP.vcxproj">
       <Project>{8d9fccba-7327-4756-a783-b83abfb4dd19}</Project>
     </ProjectReference>

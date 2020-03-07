@@ -1,10 +1,9 @@
 #include "pch.h"
 #include "framework.h"
 #include "DSP.h"
-#include "DSP.h"
 
 namespace DSP {
-	int runOnFile(SNDFILE* infile, SF_INFO* sf_info, size_t bufferLen, MultichannelSignalProcessor* msp) {
+	long long int runOnFile(SNDFILE* infile, SF_INFO* sf_info, size_t bufferLen, MultichannelSignalProcessor* msp) {
 
 		float* data = new float[bufferLen];
 		float* nodata = new float[bufferLen];
@@ -21,16 +20,17 @@ namespace DSP {
 			cout << "Invalid inputs" << endl;
 			return 1;
 		}
-
+		auto start = std::chrono::high_resolution_clock::now();
 		while ((readcount = sf_read_float(infile, data, bufferLen)))
 		{
 			msp->process_buffer(data, nodata, readcount);
 		}
+		auto end = std::chrono::high_resolution_clock::now();
 
 		sf_close(infile);
 
 		delete[] data;
 
-		return 0;
+		return std::chrono::duration_cast<std::chrono::microseconds>(end-start).count();
 	}
 }

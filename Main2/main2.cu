@@ -11,7 +11,7 @@ using namespace DSP;
 
 int main(int argc, char** argv)
 {
-	SNDFILE* infile, * outfile= NULL;
+	SNDFILE* infile, * outfile = NULL;
 
 	SF_INFO sf_info;
 
@@ -23,10 +23,11 @@ int main(int argc, char** argv)
 	size_t channels = sf_info.channels;
 	size_t datalen = atoi(argv[1]) * channels;
 	size_t subProcDataLen = datalen / channels;
-	SignalProcessor** procs = new SignalProcessor*[channels];
+	SignalProcessor** procs = new SignalProcessor * [channels];
 	for (size_t i = 0; i < channels; i++) {
-		SignalProcessor** arr = new SignalProcessor*[1];
+		SignalProcessor** arr = new SignalProcessor * [3];
 		arr[0] = new CUDADFT(subProcDataLen);
+		//arr[0] = new DFTProcessor(subProcDataLen);
 		arr[1] = new NoProcessor(subProcDataLen);
 		arr[2] = new CSVOutputWriter(subProcDataLen, "D:\\csv.csv");
 		arr[3] = new ToPolar(subProcDataLen);
@@ -41,5 +42,4 @@ int main(int argc, char** argv)
 	delete msp;
 
 	return 0;
-
 }
