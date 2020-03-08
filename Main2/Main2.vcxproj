@@ -41,7 +41,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\Program Files\Mega-Nerd\libsndfile\include;D:\_repos\thesis-src\DSP;D:\_repos\thesis-src\CUDA_DSP</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\Program Files\Mega-Nerd\libsndfile\include;</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -57,7 +57,8 @@
     </Link>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
-      <Include>D:\Program Files\Mega-Nerd\libsndfile\include;D:\_repos\thesis-src\DSP;D:\_repos\thesis-src\CUDA_DSP</Include>
+      <Include>D:\Program Files\Mega-Nerd\libsndfile\include</Include>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -80,18 +81,61 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <CudaCompile Include="CmplxUtils.cu" />
     <CudaCompile Include="CUDADFT.cu" />
     <CudaCompile Include="CUDASignalProcessor.cu" />
     <CudaCompile Include="main2.cu" />
+    <CudaCompile Include="MultichannelSignalProcessor.cu">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DSP\DSP.vcxproj">
-      <Project>{8d9fccba-7327-4756-a783-b83abfb4dd19}</Project>
-    </ProjectReference>
+    <ClInclude Include="WavOutputWriter.h" />
+    <CudaCompile Include="CmplxUtils.cuh" />
+    <ClInclude Include="Convolver.h" />
+    <ClInclude Include="CSVOutputWriter.h" />
+    <CudaCompile Include="CUDADFT.cuh" />
+    <CudaCompile Include="CUDASignalProcessor.cuh" />
+    <ClInclude Include="DFT.h" />
+    <CudaCompile Include="DSP.h" />
+    <ClInclude Include="FFT.h" />
+    <ClInclude Include="IFTT.h" />
+    <CudaCompile Include="MultichannelSignalProcessor.cuh">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </CudaCompile>
+    <ClInclude Include="OutputWriter.h" />
+    <ClInclude Include="SignalProcessor.h" />
+    <ClInclude Include="SignalProcessorChain.h" />
+    <ClInclude Include="ToPolar.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CUDADFT.h" />
-    <ClInclude Include="CUDASignalProcessor.h" />
+    <ClCompile Include="Convolver.cpp" />
+    <ClCompile Include="CSVOutputWriter.cpp">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="DFT.cpp">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="WavOutputWriter.cpp" />
+    <CudaCompile Include="DSP.cpp" />
+    <ClCompile Include="FFT.cpp">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="IFTT.cpp">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="OutputWriter.cpp">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="SignalProcessor.cpp">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="SignalProcessorChain.cpp">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="ToPolar.cpp">
+      <FileType>CppCode</FileType>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

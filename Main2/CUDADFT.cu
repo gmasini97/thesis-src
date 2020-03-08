@@ -1,33 +1,32 @@
-#include "CUDADFT.h"
+#include "CUDADFT.cuh"
 
 #define PI 3.141592654f
 
-__global__ void cudadft_kernel_dft(float* real, float* imaginary, float* rt, float* it, int readcount)
+__global__ void cudadft_kernel_dft(SignalBuffer_t device_buffer, SignalBuffer_t tmp, size_t channel)
 {
 	int k = blockIdx.x * blockDim.x + threadIdx.x;
-	
-	float sr, si;
-	float re = 0;
-	float im = 0;
+	size_t size = get_channel_buffer_size(device_buffer);
+	cuComplex temp = make_cuComplex(0,0);
+	cuComplex sample, s;
 
-	for (int i = 0; i < readcount; i++)
+	for (int i = 0; i < size; i++)
 	{
-		sr = cos(2.0f * PI * k * i / readcount);
-		si = -sin(2.0f * PI * k * i / readcount);
+		sample = get_signal_buffer_sample(device_buffer, channel, i);
 
-		re += real[i] * sr - imaginary[i] * si;
-		im += real[i] * si + imaginary[i] * sr;
+		s = cuComplex_exp(-2.0f * PI * k * i / size);
+
+		temp = cuCaddf(temp, cuCmulf(sample, s));
 	}
 
-	rt[k] = re;
-	it[k] = im;
+	set_signal_buffer_sample(tmp, channel, k, temp);
 }
-__global__ void cudadft_kernel_copy(float* real, float* imaginary, float* rt, float* it, int readcount)
+
+__global__ void cudadft_kernel_copy(SignalBuffer_t device_buffer, SignalBuffer_t tmp, size_t channel)
 {
 	int k = blockIdx.x * blockDim.x + threadIdx.x;
 
-	real[k] = rt[k];
-	imaginary[k] = it[k];
+	cuComplex sample = get_signal_buffer_sample(tmp, channel, k);
+	set_signal_buffer_sample(device_buffer, channel, k, sample);
 }
 
 
@@ -35,33 +34,41 @@ CUDADFT::CUDADFT(size_t datalen) : CUDASignalProcessor(datalen)
 {
 	cudaError_t status;
 
-	status = cudaMalloc((void**) & (this->reTmp), datalen * sizeof(float));
+	status = cuda_allocate_signal_buffer(&(this->tmp), datalen);
 	if (check_cuda_status(status)) goto fin;
 
-	status = cudaMalloc((void**) & (this->imTmp), datalen * sizeof(float));
-	if (check_cuda_status(status)) goto fin;
 fin:
 }
 
 CUDADFT::~CUDADFT()
 {
-	cudaFree(this->reTmp);
-	cudaFree(this->imTmp);
+	cuda_deallocate_signal_buffer(&(this->tmp));
 }
 
-void CUDADFT::exec_kernel(float* real, float* imaginary, size_t readcount)
+void CUDADFT::exec_kernel(SignalBuffer_t* host_buffer, SignalBuffer_t* device_buffer, size_t channel)
 {
 	cudaError_t status;
 
+	this->tmp.channels = device_buffer->channels;
+	this->tmp.size = device_buffer->size;
+
+	size_t readcount = get_channel_buffer_size(*host_buffer);
+
 	dim3 threadsPerBlock(128);
 	dim3 blocks(readcount / threadsPerBlock.x);
-	cudadft_kernel_dft <<<blocks, threadsPerBlock>>> (real, imaginary, reTmp, imTmp, readcount);
+	cudadft_kernel_dft <<<blocks, threadsPerBlock>>> (*device_buffer, this->tmp, channel);
 
 	status = cudaGetLastError();
-	if (check_cuda_status(status)) return;
+	if (check_cuda_status(status, "last_err_dft")) return;
 
 	status = cudaDeviceSynchronize();
-	if (check_cuda_status(status)) return;
+	if (check_cuda_status(status, "dev_synch_dft")) return;
 
-	cudadft_kernel_copy <<<blocks, threadsPerBlock >>> (real, imaginary, reTmp, imTmp, readcount);
+	cudadft_kernel_copy <<<blocks, threadsPerBlock >>> (*device_buffer, this->tmp, channel);
+
+	status = cudaGetLastError();
+	if (check_cuda_status(status, "last_err2_dft")) return;
+
+	status = cudaDeviceSynchronize();
+	if (check_cuda_status(status, "dev_synch2_dft")) return;
 }
