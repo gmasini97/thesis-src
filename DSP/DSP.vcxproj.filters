@@ -1,87 +1,96 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <CudaCompile Include="main.cu" />
+    <CudaCompile Include="CmplxUtils.cu">
+      <Filter>utils</Filter>
+    </CudaCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="signal processors">
+      <UniqueIdentifier>{0ecbf984-8769-4a6a-a069-807483bf4fa1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="utils">
+      <UniqueIdentifier>{c5e827ba-0436-408a-bb51-8a8d08881090}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Header Files\SignalProcessors">
-      <UniqueIdentifier>{fbeb9e81-3367-42b5-92e2-361508e69fc5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\SignalProcessors">
-      <UniqueIdentifier>{fd24e680-831b-45da-920b-3b5458bc935e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\OutputWriters">
-      <UniqueIdentifier>{bed95a50-6b97-460c-b82c-4a99f328f9b3}</UniqueIdentifier>
+    <Filter Include="chain loader">
+      <UniqueIdentifier>{9a00f41a-3aba-46e3-b234-d32179748aa5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DSP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SignalProcessor.h">
-      <Filter>Header Files</Filter>
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalBuffer.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="Convolver.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="BitMaskUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SndFileLoader.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="CsvFileWriter.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainLoader.h">
+      <Filter>chain loader</Filter>
+    </ClInclude>
+    <ClInclude Include="SndFileWriter.h">
+      <Filter>signal processors</Filter>
     </ClInclude>
     <ClInclude Include="DFT.h">
-      <Filter>Header Files\SignalProcessors</Filter>
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="DSP.h">
+      <Filter>signal processors</Filter>
     </ClInclude>
     <ClInclude Include="FFT.h">
-      <Filter>Header Files\SignalProcessors</Filter>
+      <Filter>signal processors</Filter>
     </ClInclude>
     <ClInclude Include="IFTT.h">
-      <Filter>Header Files\SignalProcessors</Filter>
+      <Filter>signal processors</Filter>
     </ClInclude>
-    <ClInclude Include="CSVOutputWriter.h">
-      <Filter>Header Files\SignalProcessors</Filter>
-    </ClInclude>
-    <ClInclude Include="OutputWriter.h">
-      <Filter>Header Files\SignalProcessors</Filter>
-    </ClInclude>
-    <ClInclude Include="ToPolar.h">
-      <Filter>Header Files\SignalProcessors</Filter>
+    <ClInclude Include="CmplxUtils.cuh">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SignalProcessor.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>signal processors</Filter>
     </ClCompile>
-    <ClCompile Include="DSP.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SignalBuffer.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolver.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="SndFileLoader.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="CsvFileWriter.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainLoader.cpp">
+      <Filter>chain loader</Filter>
+    </ClCompile>
+    <ClCompile Include="SndFileWriter.cpp">
+      <Filter>signal processors</Filter>
     </ClCompile>
     <ClCompile Include="DFT.cpp">
-      <Filter>Source Files\SignalProcessors</Filter>
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="DSP.cpp">
+      <Filter>signal processors</Filter>
     </ClCompile>
     <ClCompile Include="FFT.cpp">
-      <Filter>Source Files\SignalProcessors</Filter>
+      <Filter>signal processors</Filter>
     </ClCompile>
     <ClCompile Include="IFTT.cpp">
-      <Filter>Source Files\SignalProcessors</Filter>
-    </ClCompile>
-    <ClCompile Include="CSVOutputWriter.cpp">
-      <Filter>Source Files\SignalProcessors</Filter>
-    </ClCompile>
-    <ClCompile Include="OutputWriter.cpp">
-      <Filter>Source Files\SignalProcessors</Filter>
-    </ClCompile>
-    <ClCompile Include="ToPolar.cpp">
-      <Filter>Source Files\SignalProcessors</Filter>
+      <Filter>signal processors</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -5,12 +5,12 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
+void ifft(SignalBuffer_t* buffer, size_t channel);
 
 class IFFTProcessor : public SignalProcessor
 {
 public:
 	IFFTProcessor(size_t datalen);
 	~IFFTProcessor();
-	void reset();
-	void process_buffer(float* real, float* imaginary, size_t readcount);
+	void process_buffer(SignalBuffer_t* buffer, size_t channel);
 };

@@ -36,10 +36,20 @@ namespace DSP {
 		}
 
 		auto start = std::chrono::high_resolution_clock::now();
+		size_t count = 0;
+		size_t k = 0;
 
 		while ((readcount = sf_read_float(infile, data, bufferLen)))
 		{
 			signal_buffer_from_floats(&signalBuffer, data, nodata, channels, readcount);
+			count += readcount;
+			cout << count << endl;
+			k++;
+			if (k > 1024)
+			{
+				flush(cout);
+				k=0;
+			}
 			for (size_t i = 0; i < channels; i++)
 			{
 				sp[i]->process_buffer(&signalBuffer, i);

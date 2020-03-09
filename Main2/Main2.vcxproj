@@ -90,6 +90,7 @@
     </CudaCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CmdParser.h" />
     <ClInclude Include="WavOutputWriter.h" />
     <CudaCompile Include="CmplxUtils.cuh" />
     <ClInclude Include="Convolver.h" />

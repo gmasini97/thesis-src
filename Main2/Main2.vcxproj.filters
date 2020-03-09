@@ -26,6 +26,8 @@
     <CudaCompile Include="MultichannelSignalProcessor.cuh">
       <Filter>SignalProcessors\obsolete</Filter>
     </CudaCompile>
+    <CudaCompile Include="DSP.h" />
+    <CudaCompile Include="DSP.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="SignalProcessors">
@@ -39,6 +41,9 @@
     </Filter>
     <Filter Include="SignalProcessors\utils">
       <UniqueIdentifier>{7f58924b-6850-4468-a142-51a613170128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CmdParser">
+      <UniqueIdentifier>{3c062c2f-acb6-4adf-bcee-6f882db27caa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +108,9 @@
     </ClInclude>
     <ClInclude Include="WavOutputWriter.h">
       <Filter>SignalProcessors</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdParser.h">
+      <Filter>CmdParser</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

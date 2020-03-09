@@ -11,21 +11,21 @@
 #include <sndfile.h>
 #include <iostream>
 
-#define filter_size 256
+#define filter_size 16
 
 using namespace DSP;
 
 int main(int argc, char** argv)
 {
+
 	SNDFILE* infile, *convfile;
 
 	SF_INFO sf_info, sf_info2;
 
 	memset(&sf_info, 0, sizeof(sf_info));
 
-
 	infile = sf_open_fd(0, SFM_READ, &sf_info, true);
-	convfile = sf_open("D:\\avg256.wav", SFM_READ, &sf_info2);
+	convfile = sf_open("D:\\avg16.wav", SFM_READ, &sf_info2);
 
 	SignalBuffer_t convsig = allocate_signal_buffer(filter_size);
 	float* data = new float[filter_size];
@@ -38,6 +38,7 @@ int main(int argc, char** argv)
 	size_t subProcDataLen = datalen / channels;
 
 	cout << channels << endl;
+	flush(cout);
 
 	SignalProcessor** procs = new SignalProcessor * [channels];
 

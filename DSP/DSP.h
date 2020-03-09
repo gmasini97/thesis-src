@@ -10,7 +10,7 @@
 using namespace std;
 
 namespace DSP {
-	long long int runOnFile(SNDFILE* infile, SF_INFO* sf_info, size_t bufferLen, MultichannelSignalProcessor* msp);
+	long long int runOnFile(SNDFILE* infile, SF_INFO* sf_info, size_t bufferLen, SignalProcessor** sp);
 
 	//int runWithStdInOut(size_t bufferLen, SignalProcessor* processor);
 }

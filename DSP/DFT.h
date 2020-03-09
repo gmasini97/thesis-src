@@ -2,14 +2,14 @@
 #include "SignalProcessor.h"
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include "CmplxUtils.cuh"
 
-void dft(float* real, float* imaginary, size_t size);
+void dft(SignalBuffer_t* buffer, size_t channel);
 
 class DFTProcessor : public SignalProcessor
 {
 public:
-	DFTProcessor(size_t datalen);
+	DFTProcessor(AbstractSignalProcessor* p, BitMask channels_to_process);
 	~DFTProcessor();
-	void reset();
-	void process_buffer(float* real, float* imaginary, size_t readcount);
+	void process_buffer(SignalBuffer_t* buffer);
 };

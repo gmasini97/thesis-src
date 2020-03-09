@@ -1,49 +1,54 @@
-#include "pch.h"
 #include "DFT.h"
 
-void dft(float* real, float* imaginary, size_t size)
+void dft(SignalBuffer_t* buffer, size_t channel)
 {
-	float* re = new float[size];
-	float* im = new float[size];
+	size_t channel_size = get_channel_buffer_size(*buffer, channel);
+	size_t size = channel_size * 2 - 1;
+	
+	cuComplex* tmp = new cuComplex[size];
 
-	float sr, si;
+	cuComplex sample, s;
 
 	for (size_t k = 0; k < size; k++)
 	{
-		re[k] = 0;
-		im[k] = 0;
+		tmp[k] = make_cuFloatComplex(0,0);
 		for (size_t i = 0; i < size; i++)
 		{
-			sr = (float) cos(2 * M_PI * k * i / size);
-			si = (float) -sin(2 * M_PI * k * i / size);
+			s = cuComplex_exp(-2 * M_PI * k * i / size);
+			sample = get_signal_buffer_sample(*buffer, channel, i);
 
-			re[k] += real[i] * sr - imaginary[i] * si;
-			im[k] += real[i] * si + imaginary[i] * sr;
+			tmp[k] = cuCaddf(tmp[k], cuCmulf(sample, s));
 		}
 	}
 
 	for (size_t k = 0; k < size; k++)
 	{
-		real[k] = re[k];
-		imaginary[k] = im[k];
+		set_signal_buffer_sample(*buffer, channel, k, tmp[k]);
 	}
 
-	delete[] re;
-	delete[] im;
+	delete[] tmp;
 }
 
-DFTProcessor::DFTProcessor(size_t datalen) : SignalProcessor(datalen)
+DFTProcessor::DFTProcessor(AbstractSignalProcessor* p, BitMask channels_to_process) : SignalProcessor(p, channels_to_process)
 {
 }
+
 DFTProcessor::~DFTProcessor()
 {
 }
 
-void DFTProcessor::reset()
+void DFTProcessor::process_buffer(SignalBuffer_t* buffer)
 {
-}
+	size_t channels = get_channels(*buffer);
+	for (size_t c = 0 ; c < channels; c++) {
+		size_t size = get_channel_buffer_size(*buffer, c);
+		if (size > 0)
+		{
+			dft(buffer, c);
+			//set_channel_buffer_size(*buffer, c, size / 2 + 1);
+		}
+	}
 
-void DFTProcessor::process_buffer(float* real, float* imaginary, size_t readcount)
-{
-	dft(real, imaginary, readcount);
+	if (has_next_processor())
+		get_next_processor()->process_buffer(buffer);
 }

@@ -2,16 +2,16 @@
 #include "SignalProcessor.h"
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include "CmplxUtils.cuh"
 
-void bit_reversal_sort(float* real, float* imaginary, size_t size);
-void butterfly_calculation(float* reA, float* imA, float* reB, float* imB, float reW, float imW);
-void fft(float* real, float* imaginary, size_t size);
+void bit_reversal_sort(SignalBuffer_t* buffer, size_t channel);
+void butterfly_calculation(cuComplex* a, cuComplex* b, cuComplex w);
+void fft(SignalBuffer_t* buffer, size_t channel);
 
 class FFTProcessor : public SignalProcessor
 {
 public:
 	FFTProcessor(size_t datalen);
 	~FFTProcessor();
-	void reset();
-	void process_buffer(float* real, float* imaginary, size_t readcount);
+	void process_buffer(SignalBuffer_t* buffer, size_t channel);
 };

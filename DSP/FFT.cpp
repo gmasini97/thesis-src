@@ -1,10 +1,11 @@
-#include "pch.h"
 #include "FFT.h"
 
-void bit_reversal_sort(float* real, float* imaginary, size_t size)
+void bit_reversal_sort(SignalBuffer_t* buffer, size_t channel)
 {
+	size_t size = get_channel_buffer_size(*buffer);
+	cuComplex sample, temporary;
+
 	size_t j, k, halfSize;
-	float tmpRe, tmpIm;
 
 	halfSize = size / 2;
 	j = halfSize;
@@ -13,12 +14,10 @@ void bit_reversal_sort(float* real, float* imaginary, size_t size)
 	{
 		if (i < j)
 		{
-			tmpRe = real[j];
-			tmpIm = imaginary[j];
-			real[j] = real[i];
-			imaginary[j] = imaginary[i];
-			real[i] = tmpRe;
-			imaginary[i] = tmpIm;
+			temporary = get_signal_buffer_sample(*buffer, channel, j);
+			sample = get_signal_buffer_sample(*buffer, channel, i);
+			set_signal_buffer_sample(*buffer, channel, j, sample);
+			set_signal_buffer_sample(*buffer, channel, i, temporary);
 		}
 		k = halfSize;
 		while (k <= j)
@@ -30,67 +29,48 @@ void bit_reversal_sort(float* real, float* imaginary, size_t size)
 	}
 }
 
-void mul_cmplx(float* reA, float* imA, float reB, float imB)
+void butterfly_calculation(cuComplex* a, cuComplex* b, cuComplex w)
 {
-	float a = *reA * reB - *imA * imB;
-	float b = *reA * imB + *imA * reB;
-	*reA = a;
-	*imA = b;
+	cuComplex aa = *a;
+	cuComplex bw = cuCmulf(*b, w);
+
+	*a = cuCaddf(aa, bw);
+	*b = cuCsubf(aa, bw);
 }
 
-void butterfly_calculation(float* reA, float* imA, float *reB, float *imB, float reW, float imW)
+void fft(SignalBuffer_t* buffer, size_t channel)
 {
-	float reAA = *reA;
-	float imAA = *imA;
+	size_t size = get_channel_buffer_size(*buffer);
 
-	float reBW = *reB;
-	float imBW = *imB;
+	cuComplex w, wm;
 
-	mul_cmplx(&reBW, &imBW, reW, imW);
-
-	//float reBW = *reB * reW - *imB * imW;
-	//float imBW = *reB * imW + *imB * reW;
-
-	*reA += reBW;
-	*imA += imBW;
-	
-	*reB = reAA - reBW;
-	*imB = imAA - imBW;
-}
-
-void exp(float* re, float* im, float exp)
-{
-	*re = cos(exp);
-	*im = sin(exp);
-}
-
-void fft(float* real, float* imaginary, size_t size)
-{
-	float reW, imW, reDeltaW, imDeltaW;
 	size_t levels;
-	size_t butterfly_exponent;
 	size_t index_a, index_b;
 
 	levels = (size_t)log2(size);
-	bit_reversal_sort(real, imaginary, size);
+
+	bit_reversal_sort(buffer, channel);
 
 	for (size_t level = 0; level < levels; level++)
 	{
 		size_t butterflies_per_dft = (size_t)pow(2, level);
 		size_t dfts = size / (butterflies_per_dft * 2);
-		exp(&reDeltaW, &imDeltaW, -(M_PI/butterflies_per_dft));
-		reW = 1.0f;
-		imW = 0.0f;
+
+		wm = cuComplex_exp(-(M_PI / butterflies_per_dft));
+		w = make_cuComplex(1,0);
 		for (size_t butterfly = 0; butterfly < butterflies_per_dft; butterfly++)
 		{
-			butterfly_exponent = butterfly * dfts;
 			for (size_t dft = 0; dft < dfts; dft++)
 			{
 				index_a = butterfly + dft * (butterflies_per_dft * 2);
 				index_b = index_a + butterflies_per_dft;
-				butterfly_calculation(real + index_a, imaginary + index_a, real + index_b, imaginary + index_b, reW, imW);
+				cuComplex a = get_signal_buffer_sample(*buffer, channel, index_a);
+				cuComplex b = get_signal_buffer_sample(*buffer, channel, index_b);
+				butterfly_calculation(&a, &b, w);
+				set_signal_buffer_sample(*buffer, channel, index_a, a);
+				set_signal_buffer_sample(*buffer, channel, index_b, b);
 			}
-			mul_cmplx(&reW, &imW, reDeltaW, imDeltaW);
+			w = cuCmulf(w, wm);
 		}
 	}
 }
@@ -102,11 +82,7 @@ FFTProcessor::~FFTProcessor()
 {
 }
 
-void FFTProcessor::reset()
+void FFTProcessor::process_buffer(SignalBuffer_t* buffer, size_t channel)
 {
-}
-
-void FFTProcessor::process_buffer(float* real, float* imaginary, size_t readcount)
-{
-	fft(real, imaginary, readcount);
+	fft(buffer, channel);
 }
