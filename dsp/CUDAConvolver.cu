@@ -37,7 +37,7 @@ __global__ void cudaconvolver_kernel_output(SignalBuffer_t device_buffer, Signal
 
 	for (int i = 0; i < signal_size; i++)
 	{
-		signal_sample = get_signal_buffer_sample(signal, channel, i);
+		signal_sample = get_signal_buffer_sample(signal, SIGNAL_CHANNEL, i);
 		if (i > k)
 			input_sample = make_cuComplex(0,0);
 		else

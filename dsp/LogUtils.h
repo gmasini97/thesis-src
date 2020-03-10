@@ -2,7 +2,7 @@
 
 #include <cstdio>
 
-//#define LOGUTILS_LOG_ENABLE
+#define LOGUTILS_LOG_ENABLE
 
 #ifdef LOGUTILS_LOG_ENABLE
 	#define LOG(...) fprintf(stdout, __VA_ARGS__);
