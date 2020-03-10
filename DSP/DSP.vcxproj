@@ -58,6 +58,7 @@
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <Include>D:\Program Files\Mega-Nerd\libsndfile\include;</Include>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -81,6 +82,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="CmplxUtils.cu" />
+    <CudaCompile Include="CUDAConvolver.cu" />
+    <CudaCompile Include="CUDADFT.cu" />
+    <CudaCompile Include="CUDASignalProcessor.cu" />
     <CudaCompile Include="main.cu" />
   </ItemGroup>
   <ItemGroup>
@@ -89,16 +93,18 @@
     <ClInclude Include="CmplxUtils.cuh" />
     <ClInclude Include="Convolver.h" />
     <ClInclude Include="CsvFileWriter.h" />
+    <CudaCompile Include="CUDADFT.cuh" />
+    <CudaCompile Include="CUDASignalProcessor.cuh" />
+    <ClInclude Include="CUDAConvolver.cuh" />
     <ClInclude Include="DFT.h" />
-    <ClInclude Include="DSP.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="FFT.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="GainProcessor.h" />
     <ClInclude Include="IFTT.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="LogUtils.h" />
     <ClInclude Include="SignalBuffer.h" />
     <ClInclude Include="SignalProcessor.h" />
     <ClInclude Include="SndFileLoader.h" />
@@ -109,14 +115,12 @@
     <ClCompile Include="Convolver.cpp" />
     <ClCompile Include="CsvFileWriter.cpp" />
     <ClCompile Include="DFT.cpp" />
-    <ClCompile Include="DSP.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="FFT.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GainProcessor.cpp" />
     <ClCompile Include="IFTT.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="SignalBuffer.cpp" />
     <ClCompile Include="SignalProcessor.cpp" />

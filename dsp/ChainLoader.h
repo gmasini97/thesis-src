@@ -3,10 +3,15 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "SignalProcessor.h"
+#include "GainProcessor.h"
 #include "CsvFileWriter.h"
 #include "Convolver.h"
 #include "SndFileWriter.h"
 #include "DFT.h"
+#include "CUDADFT.cuh"
+#include "CUDAConvolver.cuh"
+#include "FFT.h"
+#include "IFTT.h"
 #include <sstream>
 #include <fstream>
 

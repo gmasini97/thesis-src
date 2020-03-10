@@ -92,22 +92,21 @@ size_t signal_buffer_to_floats(SignalBuffer_t buffer, float* real, float* imagin
 
 	return max_channel_size * channels;
 }
-/*
-size_t signal_buffer_to_floats(SignalBuffer_t buffer, BitMask channelMask, float* real, float* imaginary)
+
+void signal_buffer_multiply(SignalBuffer_t dest, SignalBuffer_t b, size_t channel)
 {
-	size_t max_channel_buffer_size;
-	size_t channels = get_channels(buffer);
+	if (channel >= get_channels(dest) || channel >= get_channels(b))
+		return;
 
-	for (size_t channel = 0; channels < )
+	size_t channel_a_size = get_channel_buffer_size(dest, channel);
+	size_t channel_b_size = get_channel_buffer_size(b, channel);
+	size_t size = channel_a_size > channel_b_size ? channel_b_size : channel_a_size;
 
-	size_t channels = buffer.channels;
-
-	for (size_t i = 0; i < to_read; i++)
+	for (size_t i = 0; i < size; i++)
 	{
-		cuComplex sample = get_signal_buffer_sample(buffer, channel, i);
-		real[i] = sample.x;
-		imaginary[i] = sample.y;
-	}
+		cuComplex ca = get_signal_buffer_sample(dest, channel, i);
+		cuComplex cb = get_signal_buffer_sample(dest, channel, i);
 
-	return to_read;
-}*/
+		set_signal_buffer_sample(dest, channel, i, cuCmulf(ca, cb));
+	}
+}

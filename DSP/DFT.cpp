@@ -2,8 +2,7 @@
 
 void dft(SignalBuffer_t* buffer, size_t channel)
 {
-	size_t channel_size = get_channel_buffer_size(*buffer, channel);
-	size_t size = channel_size * 2 - 1;
+	size_t size = get_channel_buffer_size(*buffer, channel);
 	
 	cuComplex* tmp = new cuComplex[size];
 
@@ -42,7 +41,7 @@ void DFTProcessor::process_buffer(SignalBuffer_t* buffer)
 	size_t channels = get_channels(*buffer);
 	for (size_t c = 0 ; c < channels; c++) {
 		size_t size = get_channel_buffer_size(*buffer, c);
-		if (size > 0)
+		if (has_to_process_channel(c) && size > 0)
 		{
 			dft(buffer, c);
 			//set_channel_buffer_size(*buffer, c, size / 2 + 1);

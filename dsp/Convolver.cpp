@@ -52,9 +52,28 @@ void Convolver::process_buffer(SignalBuffer_t* buffer)
 
 		size_t buffer_size = get_channel_buffer_size(*buffer, channel);
 		size_t signal_size = get_channel_buffer_size(this->signal, SIGNAL_CHANNEL);
-		size_t total = buffer_size + signal_size - 1;
+		size_t remaining_samples = this->samples_remaining[channel];
 
 		size_t temp_index = this->temp_indexes[channel];
+		if ((buffer_size == 0 || signal_size == 0) && remaining_samples > 0)
+		{
+			size_t count = 0;
+			cuComplex sample = get_signal_buffer_sample(this->temp, channel, temp_index);
+			while (remaining_samples > 0 &&
+				set_signal_buffer_sample(*buffer, channel, count, sample)) {
+
+				count++;
+				temp_index = bounded_index(this->temp, channel, temp_index + 1);
+				sample = get_signal_buffer_sample(this->temp, channel, temp_index);
+				remaining_samples--;
+			}
+			temp_indexes[channel] = temp_index;
+			samples_remaining[channel] = remaining_samples;
+			continue;
+		}
+
+		size_t total = buffer_size + signal_size - 1;
+
 
 		for (size_t i = 0; i < buffer_size; i++)
 		{
@@ -79,7 +98,7 @@ void Convolver::process_buffer(SignalBuffer_t* buffer)
 		}
 
 		this->temp_indexes[channel] = bounded_index(this->temp, channel, temp_index + buffer_size);
-		//this->samples_remaining[channel] = signal_size - 1;
+		this->samples_remaining[channel] = signal_size - 1;
 	}
 
 	if (has_next_processor())

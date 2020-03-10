@@ -5,6 +5,21 @@
     <CudaCompile Include="CmplxUtils.cu">
       <Filter>utils</Filter>
     </CudaCompile>
+    <CudaCompile Include="CUDASignalProcessor.cu">
+      <Filter>signal processors\cuda</Filter>
+    </CudaCompile>
+    <CudaCompile Include="CUDASignalProcessor.cuh">
+      <Filter>signal processors\cuda</Filter>
+    </CudaCompile>
+    <CudaCompile Include="CUDADFT.cuh">
+      <Filter>signal processors\cuda</Filter>
+    </CudaCompile>
+    <CudaCompile Include="CUDADFT.cu">
+      <Filter>signal processors\cuda</Filter>
+    </CudaCompile>
+    <CudaCompile Include="CUDAConvolver.cu">
+      <Filter>signal processors\cuda</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="signal processors">
@@ -15,6 +30,9 @@
     </Filter>
     <Filter Include="chain loader">
       <UniqueIdentifier>{9a00f41a-3aba-46e3-b234-d32179748aa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="signal processors\cuda">
+      <UniqueIdentifier>{3a7649aa-e26d-40b9-b901-8c4811e513ae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,9 +63,6 @@
     <ClInclude Include="DFT.h">
       <Filter>signal processors</Filter>
     </ClInclude>
-    <ClInclude Include="DSP.h">
-      <Filter>signal processors</Filter>
-    </ClInclude>
     <ClInclude Include="FFT.h">
       <Filter>signal processors</Filter>
     </ClInclude>
@@ -56,6 +71,15 @@
     </ClInclude>
     <ClInclude Include="CmplxUtils.cuh">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GainProcessor.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="LogUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="CUDAConvolver.cuh">
+      <Filter>signal processors\cuda</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -83,13 +107,13 @@
     <ClCompile Include="DFT.cpp">
       <Filter>signal processors</Filter>
     </ClCompile>
-    <ClCompile Include="DSP.cpp">
-      <Filter>signal processors</Filter>
-    </ClCompile>
     <ClCompile Include="FFT.cpp">
       <Filter>signal processors</Filter>
     </ClCompile>
     <ClCompile Include="IFTT.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="GainProcessor.cpp">
       <Filter>signal processors</Filter>
     </ClCompile>
   </ItemGroup>

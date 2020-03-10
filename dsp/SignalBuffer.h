@@ -17,10 +17,11 @@ typedef struct SignalBuffer_t SignalBuffer_t;
 SignalBuffer_t create_signal_buffer(size_t max_buffer_length, size_t channels);
 size_t signal_buffer_from_floats(SignalBuffer_t buffer, float* real, float* imaginary, size_t size);
 size_t signal_buffer_to_floats(SignalBuffer_t buffer, float* real, float* imaginary);
-//size_t signal_buffer_to_floats(SignalBuffer_t buffer, size_t channel, float* real, float* imaginary);
 void delete_signal_buffer(SignalBuffer_t buffer);
 void clear_signal_buffer(SignalBuffer_t buffer);
 void clear_signal_buffer_deep(SignalBuffer_t buffer);
+
+void signal_buffer_multiply(SignalBuffer_t a, SignalBuffer_t b, size_t channel);
 
 
 
@@ -86,8 +87,9 @@ __host__ __device__ static inline size_t get_signal_buffer_channel_sample_index(
 
 __host__ __device__ static inline cuComplex get_signal_buffer_sample(SignalBuffer_t buffer, size_t channel, size_t index)
 {
-	if (index >= get_channel_buffer_size(buffer, channel))
-		return make_cuComplex(0,0);
+	size_t buffer_size = get_channel_buffer_size(buffer, channel);
+	if (index >= buffer_size)
+		return make_cuComplex(0, 0);
 	return buffer.samples[get_signal_buffer_channel_sample_index(buffer, channel, index)];
 }
 

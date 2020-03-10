@@ -2,7 +2,8 @@
 
 void bit_reversal_sort(SignalBuffer_t* buffer, size_t channel)
 {
-	size_t size = get_channel_buffer_size(*buffer);
+	size_t size = get_channel_buffer_size(*buffer, channel);
+
 	cuComplex sample, temporary;
 
 	size_t j, k, halfSize;
@@ -40,7 +41,12 @@ void butterfly_calculation(cuComplex* a, cuComplex* b, cuComplex w)
 
 void fft(SignalBuffer_t* buffer, size_t channel)
 {
-	size_t size = get_channel_buffer_size(*buffer);
+	size_t size = get_channel_buffer_size(*buffer, channel);
+	fft_ws(buffer, channel, size);
+}
+
+void fft_ws(SignalBuffer_t* buffer, size_t channel, size_t size)
+{
 
 	cuComplex w, wm;
 
@@ -75,14 +81,22 @@ void fft(SignalBuffer_t* buffer, size_t channel)
 	}
 }
 
-FFTProcessor::FFTProcessor(size_t datalen) : SignalProcessor(datalen)
-{
-}
-FFTProcessor::~FFTProcessor()
+FFTProcessor::FFTProcessor(AbstractSignalProcessor* next, BitMask channels_to_process) : SignalProcessor(next, channels_to_process)
 {
 }
 
-void FFTProcessor::process_buffer(SignalBuffer_t* buffer, size_t channel)
+void FFTProcessor::process_buffer(SignalBuffer_t* buffer)
 {
-	fft(buffer, channel);
+	size_t channels = get_channels(*buffer);
+	for (size_t channel = 0; channel < channels; channel++)
+	{
+		size_t size = get_channel_buffer_size(*buffer, channel);
+		if (has_to_process_channel(channel) && size > 0) {
+			fft(buffer, channel);
+			//set_channel_buffer_size(*buffer, channel, size / 2 + 1);
+		}
+	}
+
+	if (has_next_processor())
+		get_next_processor()->process_buffer(buffer);
 }
