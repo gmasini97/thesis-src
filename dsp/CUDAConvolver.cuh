@@ -15,7 +15,8 @@
 class CUDAConvolver : public CUDASignalProcessor
 {
 private:
-	SignalBuffer_t tmp, signal, device_signal;
+	SignalBuffer_t tmp = empty_signal_buffer();
+	SignalBuffer_t signal, device_signal;
 	size_t* temp_indexes;
 	size_t* samples_remaining;
 public:

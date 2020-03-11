@@ -2,6 +2,7 @@
 
 #include "SignalBuffer.h"
 #include "BitMaskUtils.h"
+#include "LogUtils.h"
 
 class AbstractSignalProcessor
 {

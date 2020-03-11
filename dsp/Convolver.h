@@ -11,7 +11,7 @@ class Convolver : public SignalProcessor
 {
 private:
 	SignalBuffer_t signal;
-	SignalBuffer_t temp;
+	SignalBuffer_t temp = empty_signal_buffer();
 
 	size_t* temp_indexes;
 	size_t* samples_remaining;

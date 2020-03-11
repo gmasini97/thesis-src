@@ -119,6 +119,19 @@ AbstractSignalProcessor* create_from_line(string line, AbstractSignalProcessor* 
 		return create_convolver_from_file(next, mask, filename, size);
 	}
 	else
+	if (name == "fftconv")
+	{
+		int size;
+		if (!chain_loader_read_int(ss, size))
+			return NULL;
+
+		string filename;
+		if (!chain_loader_read_str(ss, filename))
+			return NULL;
+
+		return create_fftconvolver_from_file(next, mask, filename, size);
+	}
+	else
 	if (name == "gain")
 	{
 		float reg, img;
@@ -131,12 +144,18 @@ AbstractSignalProcessor* create_from_line(string line, AbstractSignalProcessor* 
 	else
 	if (name == "dft")
 	{
-		return new DFTProcessor(next,mask);
+		int size;
+		if (!chain_loader_read_int(ss, size))
+			return NULL;
+		return new DFTProcessor(next,mask,size);
 	}
 	else
 	if (name == "fft")
 	{
-		return new FFTProcessor(next, mask);
+		int size;
+		if (!chain_loader_read_int(ss, size))
+			return NULL;
+		return new FFTProcessor(next, mask,size);
 	}
 	else
 	if (name == "ifft")

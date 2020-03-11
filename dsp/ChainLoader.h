@@ -6,6 +6,7 @@
 #include "GainProcessor.h"
 #include "CsvFileWriter.h"
 #include "Convolver.h"
+#include "FFTConvolution.h"
 #include "SndFileWriter.h"
 #include "DFT.h"
 #include "CUDADFT.cuh"

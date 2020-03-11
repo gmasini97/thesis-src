@@ -6,6 +6,8 @@
 #include <cmath>
 
 void ifft(SignalBuffer_t* buffer, size_t channel);
+void ifft_wsio(SignalBuffer_t* bufferIn, SignalBuffer_t* bufferOut, size_t channel, size_t size);
+void idft_wsio(SignalBuffer_t* bufferIn, SignalBuffer_t* bufferOut, size_t channel, size_t size);
 
 class IFFTProcessor : public SignalProcessor
 {

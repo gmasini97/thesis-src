@@ -100,6 +100,7 @@
     <ClInclude Include="FFT.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="FFTConvolution.h" />
     <ClInclude Include="GainProcessor.h" />
     <ClInclude Include="IFTT.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -118,6 +119,7 @@
     <ClCompile Include="FFT.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="FFTConvolution.cpp" />
     <ClCompile Include="GainProcessor.cpp" />
     <ClCompile Include="IFTT.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
