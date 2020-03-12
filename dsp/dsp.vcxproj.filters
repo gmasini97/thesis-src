@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CudaCompile Include="main.cu" />
+    <CudaCompile Include="CmplxUtils.cu">
+      <Filter>utils</Filter>
+    </CudaCompile>
+    <CudaCompile Include="CUDASignalProcessor.cu">
+      <Filter>signal processors\cuda</Filter>
+    </CudaCompile>
+    <CudaCompile Include="CUDASignalProcessor.cuh">
+      <Filter>signal processors\cuda</Filter>
+    </CudaCompile>
+    <CudaCompile Include="CUDADFT.cuh">
+      <Filter>signal processors\cuda</Filter>
+    </CudaCompile>
+    <CudaCompile Include="CUDADFT.cu">
+      <Filter>signal processors\cuda</Filter>
+    </CudaCompile>
+    <CudaCompile Include="CUDAConvolver.cu">
+      <Filter>signal processors\cuda</Filter>
+    </CudaCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="signal processors">
+      <UniqueIdentifier>{0ecbf984-8769-4a6a-a069-807483bf4fa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{c5e827ba-0436-408a-bb51-8a8d08881090}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="chain loader">
+      <UniqueIdentifier>{9a00f41a-3aba-46e3-b234-d32179748aa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="signal processors\cuda">
+      <UniqueIdentifier>{3a7649aa-e26d-40b9-b901-8c4811e513ae}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SignalProcessor.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalBuffer.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="Convolver.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="BitMaskUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SndFileLoader.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="CsvFileWriter.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainLoader.h">
+      <Filter>chain loader</Filter>
+    </ClInclude>
+    <ClInclude Include="SndFileWriter.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="DFT.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="FFT.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="IFTT.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="CmplxUtils.cuh">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GainProcessor.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+    <ClInclude Include="LogUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="CUDAConvolver.cuh">
+      <Filter>signal processors\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="FFTConvolution.h">
+      <Filter>signal processors</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SignalProcessor.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="SignalBuffer.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="Convolver.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="SndFileLoader.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="CsvFileWriter.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainLoader.cpp">
+      <Filter>chain loader</Filter>
+    </ClCompile>
+    <ClCompile Include="SndFileWriter.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="DFT.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="FFT.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="IFTT.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="GainProcessor.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+    <ClCompile Include="FFTConvolution.cpp">
+      <Filter>signal processors</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
