@@ -79,15 +79,7 @@ void fft_wsio(SignalBuffer_t* bufferIn, SignalBuffer_t* bufferOut, size_t channe
 
 	levels = (size_t)log2(size);
 
-	for (int i = 0; i < 8; i++) {
-		LOG("%.3f  ", get_signal_buffer_sample(*bufferOut,channel,i).x);
-	}
-	LOG("\n");
 	bit_reversal_sort_wsio(bufferIn, bufferOut, channel, size);
-	for (int i = 0; i < 8; i++) {
-		LOG("%.3f  ", get_signal_buffer_sample(*bufferOut, channel, i).x);
-	}
-	LOG("\n");
 
 	for (size_t level = 0; level < levels; level++)
 	{
