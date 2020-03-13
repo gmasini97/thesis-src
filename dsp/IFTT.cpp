@@ -70,12 +70,14 @@ void ifft_wsio(SignalBuffer_t* bufferIn, SignalBuffer_t* bufferOut, size_t chann
 	}
 }
 
-IFFTProcessor::IFFTProcessor(AbstractSignalProcessor* next, BitMask channels_to_process) : SignalProcessor(next, channels_to_process)
+IFFTProcessor::IFFTProcessor(AbstractSignalProcessor* previous, BitMask channels_to_process) : SignalProcessor(previous, channels_to_process)
 {
 }
 
 void IFFTProcessor::process_buffer(SignalBuffer_t* buffer)
 {
+	if (has_previous_processor())
+		get_previous_processor()->process_buffer(buffer);
 	size_t channels = get_channels(*buffer);
 	for (size_t channel = 0; channel < channels; channel++)
 	{
@@ -86,6 +88,4 @@ void IFFTProcessor::process_buffer(SignalBuffer_t* buffer)
 		}
 	}
 
-	if (has_next_processor())
-		get_next_processor()->process_buffer(buffer);
 }

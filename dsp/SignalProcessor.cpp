@@ -1,16 +1,16 @@
 # include "SignalProcessor.h"
 
-SignalProcessor::SignalProcessor(AbstractSignalProcessor* next, BitMask channels_to_process)
+SignalProcessor::SignalProcessor(AbstractSignalProcessor* previous, BitMask channels_to_process)
 {
-	this->next = next;
+	this->previous = previous;
 	this->channels_to_process = channels_to_process;
 }
 
 SignalProcessor::~SignalProcessor(){}
 
-AbstractSignalProcessor* SignalProcessor::get_next_processor()
+AbstractSignalProcessor* SignalProcessor::get_previous_processor()
 {
-	return this->next;
+	return this->previous;
 }
 
 int SignalProcessor::has_to_process_channel(size_t channel)
@@ -18,15 +18,15 @@ int SignalProcessor::has_to_process_channel(size_t channel)
 	return is_bit_set(this->channels_to_process, channel);
 }
 
-int SignalProcessor::has_next_processor()
+int SignalProcessor::has_previous_processor()
 {
-	return this->next != NULL;
+	return this->previous != NULL;
 }
 
 int SignalProcessor::init(size_t max_buffer_size, size_t channels)
 {
-	if (has_next_processor())
-		return this->next->init(max_buffer_size, channels);
+	if (has_previous_processor())
+		return this->previous->init(max_buffer_size, channels);
 	return 1;
 }
 

@@ -33,6 +33,8 @@ int SndFileWriter::init(size_t max_buffer_size, size_t channels)
 
 void SndFileWriter::process_buffer(SignalBuffer_t* buffer)
 {
+	if (has_previous_processor())
+		get_previous_processor()->process_buffer(buffer);
 	size_t channels_to_write = this->info.channels;
 	size_t channels = get_channels(*buffer);
 	size_t total = signal_buffer_to_floats(*buffer, this->reals, NULL);
@@ -57,6 +59,4 @@ void SndFileWriter::process_buffer(SignalBuffer_t* buffer)
 
 	sf_write_float(this->file, this->tmp, total_per_channel * channels_to_write);
 
-	if (has_next_processor())
-		get_next_processor()->process_buffer(buffer);
 }

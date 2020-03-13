@@ -105,13 +105,15 @@ void fft_wsio(SignalBuffer_t* bufferIn, SignalBuffer_t* bufferOut, size_t channe
 	}
 }
 
-FFTProcessor::FFTProcessor(AbstractSignalProcessor* next, BitMask channels_to_process, size_t points) : SignalProcessor(next, channels_to_process)
+FFTProcessor::FFTProcessor(AbstractSignalProcessor* previous, BitMask channels_to_process, size_t points) : SignalProcessor(previous, channels_to_process)
 {
 	this->points = points;
 }
 
 void FFTProcessor::process_buffer(SignalBuffer_t* buffer)
 {
+	if (has_previous_processor())
+		get_previous_processor()->process_buffer(buffer);
 	size_t channels = get_channels(*buffer);
 	for (size_t channel = 0; channel < channels; channel++)
 	{
@@ -122,6 +124,4 @@ void FFTProcessor::process_buffer(SignalBuffer_t* buffer)
 		}
 	}
 
-	if (has_next_processor())
-		get_next_processor()->process_buffer(buffer);
 }

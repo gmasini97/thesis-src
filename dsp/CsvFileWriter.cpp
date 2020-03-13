@@ -34,6 +34,9 @@ int CsvFileWriter::init(size_t max_buffer_size, size_t channels)
 
 void CsvFileWriter::process_buffer(SignalBuffer_t* buffer)
 {
+	if (has_previous_processor())
+		get_previous_processor()->process_buffer(buffer);
+
 	size_t channels = get_channels(*buffer);
 	size_t size = get_max_channel_buffer_size(*buffer);
 	for (size_t i = 0; i < size; i++)
@@ -58,6 +61,4 @@ void CsvFileWriter::process_buffer(SignalBuffer_t* buffer)
 		fprintf(this->file, "\n");
 	}
 
-	if (has_next_processor())
-		get_next_processor()->process_buffer(buffer);
 }

@@ -21,11 +21,11 @@ private:
 	size_t* temp_indexes;
 	size_t* samples_remaining;
 public:
-	FFTConvolver(AbstractSignalProcessor* next, BitMask channels_to_process, SignalBuffer_t signal);
+	FFTConvolver(AbstractSignalProcessor* previous, BitMask channels_to_process, SignalBuffer_t signal);
 	~FFTConvolver();
 
 	int init(size_t max_buffer_size, size_t channels);
 	void process_buffer(SignalBuffer_t* buffer);
 };
 
-FFTConvolver* create_fftconvolver_from_file(AbstractSignalProcessor* next, BitMask mask, std::string filename, size_t conv_size);
+FFTConvolver* create_fftconvolver_from_file(AbstractSignalProcessor* previous, BitMask mask, std::string filename, size_t conv_size);

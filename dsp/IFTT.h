@@ -12,6 +12,6 @@ void idft_wsio(SignalBuffer_t* bufferIn, SignalBuffer_t* bufferOut, size_t chann
 class IFFTProcessor : public SignalProcessor
 {
 public:
-	IFFTProcessor(AbstractSignalProcessor* next, BitMask channels_to_process);
+	IFFTProcessor(AbstractSignalProcessor* previous, BitMask channels_to_process);
 	void process_buffer(SignalBuffer_t* buffer);
 };

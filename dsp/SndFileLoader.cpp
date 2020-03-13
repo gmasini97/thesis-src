@@ -33,11 +33,11 @@ int SndFileLoader::init(size_t max_buffer_size, size_t channels)
 
 void SndFileLoader::process_buffer(SignalBuffer_t* buffer)
 {
+	if (has_previous_processor())
+		get_previous_processor()->process_buffer(buffer);
 	size_t channels = get_channels(*buffer);
 	size_t max_size = get_max_buffer_size(*buffer);
 	size_t read_count = sf_read_float(this->file, reals, max_size);
 	signal_buffer_from_floats(*buffer, this->reals, this->imags, read_count);
 	
-	if (has_next_processor())
-		get_next_processor()->process_buffer(buffer);
 }

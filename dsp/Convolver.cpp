@@ -13,7 +13,7 @@ size_t bounded_index(SignalBuffer_t buffer, size_t channel, size_t index)
 
 
 
-Convolver::Convolver(AbstractSignalProcessor* next, BitMask channels_to_process, SignalBuffer_t signal) : SignalProcessor(next, channels_to_process)
+Convolver::Convolver(AbstractSignalProcessor* previous, BitMask channels_to_process, SignalBuffer_t signal) : SignalProcessor(previous, channels_to_process)
 {
 	this->signal = signal;
 	this->temp = empty_signal_buffer();
@@ -21,8 +21,8 @@ Convolver::Convolver(AbstractSignalProcessor* next, BitMask channels_to_process,
 
 Convolver::~Convolver()
 {
-	if(has_next_processor())
-		delete get_next_processor();
+	if(has_previous_processor())
+		delete get_previous_processor();
 	delete_signal_buffer(this->temp);
 	delete[] this->temp_indexes;
 	delete[] this->samples_remaining;
@@ -43,6 +43,9 @@ int Convolver::init(size_t max_buffer_size, size_t channels)
 
 void Convolver::process_buffer(SignalBuffer_t* buffer)
 {
+	if (has_previous_processor())
+		get_previous_processor()->process_buffer(buffer);
+
 	size_t channels = get_channels(*buffer);
 
 	for (size_t channel = 0; channel < channels; channel++)
@@ -101,9 +104,6 @@ void Convolver::process_buffer(SignalBuffer_t* buffer)
 		this->samples_remaining[channel] = signal_size - 1;
 	}
 
-	if (has_next_processor())
-		get_next_processor()->process_buffer(buffer);
-
 }
 
 
@@ -113,7 +113,7 @@ void Convolver::process_buffer(SignalBuffer_t* buffer)
 
 
 
-Convolver* create_convolver_from_file(AbstractSignalProcessor* next, BitMask mask, std::string filename, size_t conv_size)
+Convolver* create_convolver_from_file(AbstractSignalProcessor* previous, BitMask mask, std::string filename, size_t conv_size)
 {
 	SF_INFO info;
 	memset(&info, 0, sizeof(SF_INFO));
@@ -136,5 +136,5 @@ Convolver* create_convolver_from_file(AbstractSignalProcessor* next, BitMask mas
 	delete[] real;
 	delete[] imag;
 
-	return new Convolver(next, mask, buffer);
+	return new Convolver(previous, mask, buffer);
 }

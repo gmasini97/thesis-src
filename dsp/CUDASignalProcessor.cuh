@@ -27,7 +27,7 @@ protected:
 	int check_cuda_status(cudaError_t status, const char* msg = "");
 	virtual void exec_kernel(SignalBuffer_t* host_buffer, SignalBuffer_t* device_buffer) = 0;
 public:
-	CUDASignalProcessor(AbstractSignalProcessor* next, BitMask channels_to_process);
+	CUDASignalProcessor(AbstractSignalProcessor* previous, BitMask channels_to_process);
 	~CUDASignalProcessor();
 	int init(size_t max_buffer_size, size_t channels);
 	void process_buffer(SignalBuffer_t* buffer);

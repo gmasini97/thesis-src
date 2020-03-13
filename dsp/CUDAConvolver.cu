@@ -65,7 +65,7 @@ __global__ void cudaconvolver_kernel_copy(SignalBuffer_t device_buffer, SignalBu
 }
 
 
-CUDAConvolver::CUDAConvolver(AbstractSignalProcessor* next, BitMask channels_to_process, SignalBuffer_t signal) : CUDASignalProcessor(next, channels_to_process)
+CUDAConvolver::CUDAConvolver(AbstractSignalProcessor* previous, BitMask channels_to_process, SignalBuffer_t signal) : CUDASignalProcessor(previous, channels_to_process)
 {
 	this->signal = signal;
 }
@@ -189,7 +189,7 @@ void CUDAConvolver::exec_kernel(SignalBuffer_t* host_buffer, SignalBuffer_t* dev
 
 
 
-CUDAConvolver* create_cuda_convolver_from_file(AbstractSignalProcessor* next, BitMask mask, std::string filename, size_t conv_size)
+CUDAConvolver* create_cuda_convolver_from_file(AbstractSignalProcessor* previous, BitMask mask, std::string filename, size_t conv_size)
 {
 	SF_INFO info;
 	memset(&info, 0, sizeof(SF_INFO));
@@ -212,5 +212,5 @@ CUDAConvolver* create_cuda_convolver_from_file(AbstractSignalProcessor* next, Bi
 	delete[] real;
 	delete[] imag;
 
-	return new CUDAConvolver(next, mask, buffer);
+	return new CUDAConvolver(previous, mask, buffer);
 }

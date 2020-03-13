@@ -11,8 +11,13 @@ class DFTProcessor : public SignalProcessor
 {
 private:
 	size_t points;
+	size_t count;
+	size_t samples_remainig;
+	size_t rem_index;
+	SignalBuffer_t avg, tmp;
 public:
 	DFTProcessor(AbstractSignalProcessor* p, BitMask channels_to_process, size_t points);
 	~DFTProcessor();
 	void process_buffer(SignalBuffer_t* buffer);
+	int init(size_t max_buffer_size, size_t channels);
 };

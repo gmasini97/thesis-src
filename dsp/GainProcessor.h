@@ -9,6 +9,6 @@ class GainProcessor : public SignalProcessor
 private:
 	cuComplex gain;
 public:
-	GainProcessor(AbstractSignalProcessor* next, BitMask channels_to_process, float re_gain, float im_gain);
+	GainProcessor(AbstractSignalProcessor* previous, BitMask channels_to_process, float re_gain, float im_gain);
 	void process_buffer(SignalBuffer_t* buffer);
 };

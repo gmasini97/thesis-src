@@ -15,6 +15,6 @@ class FFTProcessor : public SignalProcessor
 private:
 	size_t points;
 public:
-	FFTProcessor(AbstractSignalProcessor* next, BitMask channels_to_process, size_t points);
+	FFTProcessor(AbstractSignalProcessor* previous, BitMask channels_to_process, size_t points);
 	void process_buffer(SignalBuffer_t* buffer);
 };

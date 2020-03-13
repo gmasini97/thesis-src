@@ -89,7 +89,7 @@ void cuda_deallocate_signal_buffer(SignalBuffer_t* buffer)
 	buffer->max_size = 0;
 }
 
-CUDASignalProcessor::CUDASignalProcessor(AbstractSignalProcessor* next, BitMask channels_to_process) : SignalProcessor(next, channels_to_process)
+CUDASignalProcessor::CUDASignalProcessor(AbstractSignalProcessor* previous, BitMask channels_to_process) : SignalProcessor(previous, channels_to_process)
 {
 	this->err = 0;
 	this->time = 0;
@@ -127,6 +127,8 @@ int CUDASignalProcessor::check_cuda_status(cudaError_t status, const char* msg)
 
 void CUDASignalProcessor::process_buffer(SignalBuffer_t* buffer)
 {
+	if (has_previous_processor())
+		get_previous_processor()->process_buffer(buffer);
 	LOG("CUDASignalProcessor process_buffer start\n");
 	cudaError_t status;
 	size_t channels = get_channels(*buffer);
@@ -156,8 +158,6 @@ void CUDASignalProcessor::process_buffer(SignalBuffer_t* buffer)
 
 	this->time += std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
-	if (has_next_processor())
-		get_next_processor()->process_buffer(buffer);
 }
 
 int CUDASignalProcessor::get_err()

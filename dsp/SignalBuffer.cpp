@@ -48,6 +48,9 @@ size_t signal_buffer_from_floats(SignalBuffer_t buffer, float* real, float* imag
 {
 	clear_signal_buffer(buffer);
 
+	if (size == 0)
+		return 0;
+
 	size_t to_read = (size < buffer.max_size) ? size : buffer.max_size;
 	size_t channels = buffer.channels;
 	size_t to_read_by_channel = to_read / channels;

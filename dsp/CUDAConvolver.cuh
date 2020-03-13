@@ -20,7 +20,7 @@ private:
 	size_t* temp_indexes;
 	size_t* samples_remaining;
 public:
-	CUDAConvolver(AbstractSignalProcessor* next, BitMask channels_to_process, SignalBuffer_t signal);
+	CUDAConvolver(AbstractSignalProcessor* previous, BitMask channels_to_process, SignalBuffer_t signal);
 	~CUDAConvolver();
 	int init(size_t max_buffer_size, size_t channels);
 protected:
@@ -29,4 +29,4 @@ protected:
 
 
 
-CUDAConvolver* create_cuda_convolver_from_file(AbstractSignalProcessor* next, BitMask mask, std::string filename, size_t conv_size);
+CUDAConvolver* create_cuda_convolver_from_file(AbstractSignalProcessor* previous, BitMask mask, std::string filename, size_t conv_size);

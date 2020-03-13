@@ -29,7 +29,7 @@ __global__ void cudadft_kernel_copy(SignalBuffer_t device_buffer, SignalBuffer_t
 }
 
 
-CUDADFT::CUDADFT(AbstractSignalProcessor* next, BitMask channels_to_process) : CUDASignalProcessor(next, channels_to_process)
+CUDADFT::CUDADFT(AbstractSignalProcessor* previous, BitMask channels_to_process) : CUDASignalProcessor(previous, channels_to_process)
 {
 }
 

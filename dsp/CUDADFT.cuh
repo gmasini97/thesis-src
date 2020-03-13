@@ -15,7 +15,7 @@ class CUDADFT : public CUDASignalProcessor
 private:
 	SignalBuffer_t tmp;
 public:
-	CUDADFT(AbstractSignalProcessor* next, BitMask channels_to_process);
+	CUDADFT(AbstractSignalProcessor* previous, BitMask channels_to_process);
 	~CUDADFT();
 	int init(size_t max_buffer_size, size_t channels);
 protected:

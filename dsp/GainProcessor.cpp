@@ -1,12 +1,15 @@
 #include "GainProcessor.h"
 
-GainProcessor::GainProcessor(AbstractSignalProcessor* next, BitMask channels_to_process, float re_gain, float im_gain) : SignalProcessor(next, channels_to_process)
+GainProcessor::GainProcessor(AbstractSignalProcessor* previous, BitMask channels_to_process, float re_gain, float im_gain) : SignalProcessor(previous, channels_to_process)
 {
 	this->gain = make_cuComplex(re_gain, im_gain);
 }
 
 void GainProcessor::process_buffer(SignalBuffer_t* buffer)
 {
+
+	if (has_previous_processor())
+		get_previous_processor()->process_buffer(buffer);
 	size_t channels = get_channels(*buffer);
 	for (size_t channel = 0; channel < channels; channel++)
 	{
@@ -19,7 +22,4 @@ void GainProcessor::process_buffer(SignalBuffer_t* buffer)
 			}
 		}
 	}
-
-	if (has_next_processor())
-		get_next_processor()->process_buffer(buffer);
 }
